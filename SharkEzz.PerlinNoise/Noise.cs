@@ -4,6 +4,14 @@ namespace SharkEzz.Perlin.PerlinNoise
 {
     public class Noise
     {
+        private float rand1 = new Random().Next(0, 200000),
+                      rand2 = new Random().Next(0, 200000),
+                      rand3 = new Random().Next(0, 200000),
+                      rand4 = new Random().Next(0, 200000),
+                      rand5 = new Random().Next(0, 200000),
+                      rand6 = new Random().Next(0, 200000),
+                      rand0 = new Random().Next(0, 200000);
+
         public float ComputePerlin(float x, float y)
         {
             int x0 = (int)x;
@@ -25,19 +33,17 @@ namespace SharkEzz.Perlin.PerlinNoise
             ix1 = this.interpolate(n0, n1, sx);
 
             return this.interpolate(ix0, ix1, sy);
-        }   
+        }
 
         private Vector2f randomGradient(int ix, int iy)
         {
-            float random = 2920f * (float)Math.Sin(ix * 21942f + iy * 171324f + 8912f) * (float)Math.Cos(ix * 23157f * iy * 217832f + 9758f);
-            return new Vector2f((float)Math.Cos(random), (float)Math.Sin(random));
+            float random = rand0 * (float)(Math.Sin(ix * rand1 + iy * rand2 + rand3) * Math.Cos(ix * rand4 * iy * rand5 + rand6));
+            return new Vector2f((float)Math.Cos((float)random), (float)Math.Sin((float)random));
         }
 
         private float dotGridGradient(int ix, int iy, float x, float y)
         {
             Vector2f gradient = this.randomGradient(ix, iy);
-
-            Console.WriteLine("dx : {0}, dy : {1}", x - ((float)ix), y - ((float)iy));
 
             float dx = x - (float)ix;
             float dy = y - (float)iy;
@@ -47,7 +53,7 @@ namespace SharkEzz.Perlin.PerlinNoise
 
         private float interpolate(float a0, float a1, float w)
         {
-            return (a1 - a0) * w + a0;
+            return (float)((a1 - a0) * ((w * (w * 6.0 - 15.0) + 10.0) * w * w * w) + a0);
         }
     }
 }
